@@ -21,12 +21,12 @@ def load_config(path: str | Path) -> WebAppConfig:
     with open(config_path, encoding="utf-8") as handle:
         data: Any = yaml.safe_load(handle)
 
-    
-    if not isinstance(data, dict):
+    is_mapping = isinstance(data, dict)
+    if not is_mapping:
         raise ValueError(
             f"{config_path} is empty or is not a YAML mapping. "
             "Expected key: value pairs such as 'app_name: my-app'."
-    )
+        )
 
     config = WebAppConfig.model_validate(data)
 

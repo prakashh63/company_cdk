@@ -1,0 +1,2878 @@
+# serializer version: 1
+# name: test_dev_stack_snapshot
+  dict({
+    'Outputs': dict({
+      'BackendApiEndpoint9267131E': dict({
+        'Value': dict({
+          'Fn::Join': list([
+            '',
+            list([
+              'https://',
+              dict({
+                'Ref': 'BackendApiC05D8D6E',
+              }),
+              '.execute-api.',
+              dict({
+                'Ref': 'AWS::Region',
+              }),
+              '.',
+              dict({
+                'Ref': 'AWS::URLSuffix',
+              }),
+              '/',
+              dict({
+                'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+              }),
+              '/',
+            ]),
+          ]),
+        }),
+      }),
+      'BucketName': dict({
+        'Value': dict({
+          'Ref': 'WebBucket1CCCC993',
+        }),
+      }),
+      'FunctionName': dict({
+        'Value': dict({
+          'Ref': 'BackendLambdaFunctionDED4CD69',
+        }),
+      }),
+      'SiteUrl': dict({
+        'Value': dict({
+          'Fn::Join': list([
+            '',
+            list([
+              'https://',
+              dict({
+                'Fn::GetAtt': list([
+                  'CdnDistribution149FA6C8',
+                  'DomainName',
+                ]),
+              }),
+            ]),
+          ]),
+        }),
+      }),
+    }),
+    'Parameters': dict({
+      'BootstrapVersion': dict({
+        'Default': '/cdk-bootstrap/hnb659fds/version',
+        'Description': 'Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]',
+        'Type': 'AWS::SSM::Parameter::Value<String>',
+      }),
+    }),
+    'Resources': dict({
+      'BackendApiANY55D8AEAE': dict({
+        'Properties': dict({
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'ANY',
+          'Integration': dict({
+            'IntegrationHttpMethod': 'POST',
+            'Type': 'AWS_PROXY',
+            'Uri': dict({
+              'Fn::Join': list([
+                '',
+                list([
+                  'arn:',
+                  dict({
+                    'Ref': 'AWS::Partition',
+                  }),
+                  ':apigateway:',
+                  dict({
+                    'Ref': 'AWS::Region',
+                  }),
+                  ':lambda:path/2015-03-31/functions/',
+                  dict({
+                    'Fn::GetAtt': list([
+                      'BackendLambdaFunctionDED4CD69',
+                      'Arn',
+                    ]),
+                  }),
+                  '/invocations',
+                ]),
+              ]),
+            }),
+          }),
+          'ResourceId': dict({
+            'Fn::GetAtt': list([
+              'BackendApiC05D8D6E',
+              'RootResourceId',
+            ]),
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendApiANYApiPermissionSnapStackBackendApi54AB62F6ANY2BF56DAE': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/',
+                dict({
+                  'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                }),
+                '/*/',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiANYApiPermissionTestSnapStackBackendApi54AB62F6ANYCA00F107': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/test-invoke-stage/*/',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiAccessLogs09CC28F7': dict({
+        'DeletionPolicy': 'Delete',
+        'Properties': dict({
+          'KmsKeyId': dict({
+            'Fn::GetAtt': list([
+              'LogKey15608DC4',
+              'Arn',
+            ]),
+          }),
+          'RetentionInDays': 7,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Logs::LogGroup',
+        'UpdateReplacePolicy': 'Delete',
+      }),
+      'BackendApiAccount0DC69FBD': dict({
+        'DeletionPolicy': 'Retain',
+        'DependsOn': list([
+          'BackendApiC05D8D6E',
+        ]),
+        'Properties': dict({
+          'CloudWatchRoleArn': dict({
+            'Fn::GetAtt': list([
+              'BackendApiCloudWatchRole7800ACC5',
+              'Arn',
+            ]),
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Account',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'BackendApiC05D8D6E': dict({
+        'Properties': dict({
+          'Name': 'Api',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::ApiGateway::RestApi',
+      }),
+      'BackendApiCloudWatchRole7800ACC5': dict({
+        'DeletionPolicy': 'Retain',
+        'Properties': dict({
+          'AssumeRolePolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 'sts:AssumeRole',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'apigateway.amazonaws.com',
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'ManagedPolicyArns': list([
+            dict({
+              'Fn::Join': list([
+                '',
+                list([
+                  'arn:',
+                  dict({
+                    'Ref': 'AWS::Partition',
+                  }),
+                  ':iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs',
+                ]),
+              ]),
+            }),
+          ]),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Role',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'BackendApiDeployment8DA90E502aa93c4f4c518bd1c2c978043dbfcca7': dict({
+        'DependsOn': list([
+          'BackendApiproxyANYBA6A9479',
+          'BackendApiproxyOPTIONSD1DEC500',
+          'BackendApiproxy0E2233DE',
+          'BackendApiANY55D8AEAE',
+          'BackendApiOPTIONS917DC21E',
+          'BackendApiRequestValidatorEF2FC84D',
+        ]),
+        'Metadata': dict({
+          'aws:cdk:do-not-refactor': True,
+        }),
+        'Properties': dict({
+          'Description': 'Automatically created by the RestApi construct',
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Deployment',
+      }),
+      'BackendApiDeploymentStageprod3A8BE6AD': dict({
+        'DependsOn': list([
+          'BackendApiAccount0DC69FBD',
+        ]),
+        'Properties': dict({
+          'AccessLogSetting': dict({
+            'DestinationArn': dict({
+              'Fn::GetAtt': list([
+                'BackendApiAccessLogs09CC28F7',
+                'Arn',
+              ]),
+            }),
+            'Format': '$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] "$context.httpMethod $context.resourcePath $context.protocol" $context.status $context.responseLength $context.requestId',
+          }),
+          'DeploymentId': dict({
+            'Ref': 'BackendApiDeployment8DA90E502aa93c4f4c518bd1c2c978043dbfcca7',
+          }),
+          'MethodSettings': list([
+            dict({
+              'DataTraceEnabled': False,
+              'HttpMethod': '*',
+              'LoggingLevel': 'ERROR',
+              'ResourcePath': '/*',
+              'ThrottlingBurstLimit': 500,
+              'ThrottlingRateLimit': 1000,
+            }),
+          ]),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+          'StageName': 'prod',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::ApiGateway::Stage',
+      }),
+      'BackendApiOPTIONS917DC21E': dict({
+        'Properties': dict({
+          'ApiKeyRequired': False,
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'OPTIONS',
+          'Integration': dict({
+            'IntegrationResponses': list([
+              dict({
+                'ResponseParameters': dict({
+                  'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                  'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                  'method.response.header.Access-Control-Allow-Origin': "'*'",
+                }),
+                'StatusCode': '204',
+              }),
+            ]),
+            'RequestTemplates': dict({
+              'application/json': '{ statusCode: 200 }',
+            }),
+            'Type': 'MOCK',
+          }),
+          'MethodResponses': list([
+            dict({
+              'ResponseParameters': dict({
+                'method.response.header.Access-Control-Allow-Headers': True,
+                'method.response.header.Access-Control-Allow-Methods': True,
+                'method.response.header.Access-Control-Allow-Origin': True,
+              }),
+              'StatusCode': '204',
+            }),
+          ]),
+          'ResourceId': dict({
+            'Fn::GetAtt': list([
+              'BackendApiC05D8D6E',
+              'RootResourceId',
+            ]),
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendApiRequestValidatorEF2FC84D': dict({
+        'Properties': dict({
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+          'ValidateRequestBody': True,
+          'ValidateRequestParameters': True,
+        }),
+        'Type': 'AWS::ApiGateway::RequestValidator',
+      }),
+      'BackendApiproxy0E2233DE': dict({
+        'Properties': dict({
+          'ParentId': dict({
+            'Fn::GetAtt': list([
+              'BackendApiC05D8D6E',
+              'RootResourceId',
+            ]),
+          }),
+          'PathPart': '{proxy+}',
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Resource',
+      }),
+      'BackendApiproxyANYApiPermissionSnapStackBackendApi54AB62F6ANYproxyC91976B6': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/',
+                dict({
+                  'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                }),
+                '/*/*',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiproxyANYApiPermissionTestSnapStackBackendApi54AB62F6ANYproxyF90FFDEA': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/test-invoke-stage/*/*',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiproxyANYBA6A9479': dict({
+        'Properties': dict({
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'ANY',
+          'Integration': dict({
+            'IntegrationHttpMethod': 'POST',
+            'Type': 'AWS_PROXY',
+            'Uri': dict({
+              'Fn::Join': list([
+                '',
+                list([
+                  'arn:',
+                  dict({
+                    'Ref': 'AWS::Partition',
+                  }),
+                  ':apigateway:',
+                  dict({
+                    'Ref': 'AWS::Region',
+                  }),
+                  ':lambda:path/2015-03-31/functions/',
+                  dict({
+                    'Fn::GetAtt': list([
+                      'BackendLambdaFunctionDED4CD69',
+                      'Arn',
+                    ]),
+                  }),
+                  '/invocations',
+                ]),
+              ]),
+            }),
+          }),
+          'ResourceId': dict({
+            'Ref': 'BackendApiproxy0E2233DE',
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendApiproxyOPTIONSD1DEC500': dict({
+        'Properties': dict({
+          'ApiKeyRequired': False,
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'OPTIONS',
+          'Integration': dict({
+            'IntegrationResponses': list([
+              dict({
+                'ResponseParameters': dict({
+                  'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                  'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                  'method.response.header.Access-Control-Allow-Origin': "'*'",
+                }),
+                'StatusCode': '204',
+              }),
+            ]),
+            'RequestTemplates': dict({
+              'application/json': '{ statusCode: 200 }',
+            }),
+            'Type': 'MOCK',
+          }),
+          'MethodResponses': list([
+            dict({
+              'ResponseParameters': dict({
+                'method.response.header.Access-Control-Allow-Headers': True,
+                'method.response.header.Access-Control-Allow-Methods': True,
+                'method.response.header.Access-Control-Allow-Origin': True,
+              }),
+              'StatusCode': '204',
+            }),
+          ]),
+          'ResourceId': dict({
+            'Ref': 'BackendApiproxy0E2233DE',
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendLambdaFunctionDED4CD69': dict({
+        'DependsOn': list([
+          'BackendLambdaRoleDefaultPolicy23DD83E2',
+          'BackendLambdaRoleB8CC70D8',
+        ]),
+        'Properties': dict({
+          'Code': dict({
+            'S3Bucket': dict({
+              'Fn::Sub': 'cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}',
+            }),
+            'S3Key': '7502ee9f38b0104016baa68e73f2c45989c9d49b959c89e2f7c028a44743690b.zip',
+          }),
+          'FunctionName': 'snap-fn',
+          'Handler': 'index.handler',
+          'LoggingConfig': dict({
+            'LogGroup': dict({
+              'Ref': 'BackendLambdaLogs7F155163',
+            }),
+          }),
+          'MemorySize': 512,
+          'Role': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaRoleB8CC70D8',
+              'Arn',
+            ]),
+          }),
+          'Runtime': 'python3.14',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+          'Timeout': 30,
+        }),
+        'Type': 'AWS::Lambda::Function',
+      }),
+      'BackendLambdaLogs7F155163': dict({
+        'DeletionPolicy': 'Delete',
+        'Properties': dict({
+          'KmsKeyId': dict({
+            'Fn::GetAtt': list([
+              'LogKey15608DC4',
+              'Arn',
+            ]),
+          }),
+          'RetentionInDays': 7,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Logs::LogGroup',
+        'UpdateReplacePolicy': 'Delete',
+      }),
+      'BackendLambdaRoleB8CC70D8': dict({
+        'Properties': dict({
+          'AssumeRolePolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 'sts:AssumeRole',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'lambda.amazonaws.com',
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Role',
+      }),
+      'BackendLambdaRoleDefaultPolicy23DD83E2': dict({
+        'Properties': dict({
+          'PolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': list([
+                  'logs:CreateLogStream',
+                  'logs:PutLogEvents',
+                ]),
+                'Effect': 'Allow',
+                'Resource': dict({
+                  'Fn::GetAtt': list([
+                    'BackendLambdaLogs7F155163',
+                    'Arn',
+                  ]),
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'PolicyName': 'BackendLambdaRoleDefaultPolicy23DD83E2',
+          'Roles': list([
+            dict({
+              'Ref': 'BackendLambdaRoleB8CC70D8',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Policy',
+      }),
+      'CdnDistribution149FA6C8': dict({
+        'Properties': dict({
+          'DistributionConfig': dict({
+            'CacheBehaviors': list([
+              dict({
+                'AllowedMethods': list([
+                  'GET',
+                  'HEAD',
+                  'OPTIONS',
+                  'PUT',
+                  'PATCH',
+                  'POST',
+                  'DELETE',
+                ]),
+                'CachePolicyId': '4135ea2d-6df8-44a3-9df3-4b5a84be39ad',
+                'Compress': True,
+                'OriginRequestPolicyId': 'b689b0a8-53d0-40ab-baf2-68738e2966ac',
+                'PathPattern': '/api/*',
+                'TargetOriginId': 'SnapStackCdnDistributionOrigin216D43506',
+                'ViewerProtocolPolicy': 'redirect-to-https',
+              }),
+            ]),
+            'DefaultCacheBehavior': dict({
+              'CachePolicyId': '658327ea-f89d-4fab-a63d-7e88639e58f6',
+              'Compress': True,
+              'TargetOriginId': 'SnapStackCdnDistributionOrigin1BC6BFCD6',
+              'ViewerProtocolPolicy': 'redirect-to-https',
+            }),
+            'DefaultRootObject': 'index.html',
+            'Enabled': True,
+            'HttpVersion': 'http2',
+            'IPV6Enabled': True,
+            'Origins': list([
+              dict({
+                'DomainName': dict({
+                  'Fn::GetAtt': list([
+                    'WebBucket1CCCC993',
+                    'RegionalDomainName',
+                  ]),
+                }),
+                'Id': 'SnapStackCdnDistributionOrigin1BC6BFCD6',
+                'OriginAccessControlId': dict({
+                  'Fn::GetAtt': list([
+                    'CdnDistributionOrigin1S3OriginAccessControlFA39EED2',
+                    'Id',
+                  ]),
+                }),
+                'S3OriginConfig': dict({
+                  'OriginAccessIdentity': '',
+                }),
+              }),
+              dict({
+                'CustomOriginConfig': dict({
+                  'OriginProtocolPolicy': 'https-only',
+                  'OriginSSLProtocols': list([
+                    'TLSv1.2',
+                  ]),
+                }),
+                'DomainName': dict({
+                  'Fn::Select': list([
+                    2,
+                    dict({
+                      'Fn::Split': list([
+                        '/',
+                        dict({
+                          'Fn::Join': list([
+                            '',
+                            list([
+                              'https://',
+                              dict({
+                                'Ref': 'BackendApiC05D8D6E',
+                              }),
+                              '.execute-api.',
+                              dict({
+                                'Ref': 'AWS::Region',
+                              }),
+                              '.',
+                              dict({
+                                'Ref': 'AWS::URLSuffix',
+                              }),
+                              '/',
+                              dict({
+                                'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                              }),
+                              '/',
+                            ]),
+                          ]),
+                        }),
+                      ]),
+                    }),
+                  ]),
+                }),
+                'Id': 'SnapStackCdnDistributionOrigin216D43506',
+                'OriginPath': dict({
+                  'Fn::Join': list([
+                    '',
+                    list([
+                      '/',
+                      dict({
+                        'Fn::Select': list([
+                          3,
+                          dict({
+                            'Fn::Split': list([
+                              '/',
+                              dict({
+                                'Fn::Join': list([
+                                  '',
+                                  list([
+                                    'https://',
+                                    dict({
+                                      'Ref': 'BackendApiC05D8D6E',
+                                    }),
+                                    '.execute-api.',
+                                    dict({
+                                      'Ref': 'AWS::Region',
+                                    }),
+                                    '.',
+                                    dict({
+                                      'Ref': 'AWS::URLSuffix',
+                                    }),
+                                    '/',
+                                    dict({
+                                      'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                                    }),
+                                    '/',
+                                  ]),
+                                ]),
+                              }),
+                            ]),
+                          }),
+                        ]),
+                      }),
+                    ]),
+                  ]),
+                }),
+              }),
+            ]),
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::CloudFront::Distribution',
+      }),
+      'CdnDistributionOrigin1S3OriginAccessControlFA39EED2': dict({
+        'Properties': dict({
+          'OriginAccessControlConfig': dict({
+            'Name': 'SnapStackCdnDistributionOrigin1S3OriginAccessControl4D869369',
+            'OriginAccessControlOriginType': 's3',
+            'SigningBehavior': 'always',
+            'SigningProtocol': 'sigv4',
+          }),
+        }),
+        'Type': 'AWS::CloudFront::OriginAccessControl',
+      }),
+      'LogKey15608DC4': dict({
+        'DeletionPolicy': 'Delete',
+        'Properties': dict({
+          'Description': 'company_cdk: encrypts CloudWatch log groups',
+          'EnableKeyRotation': True,
+          'KeyPolicy': dict({
+            'Statement': list([
+              dict({
+                'Action': 'kms:*',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'AWS': dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        'arn:',
+                        dict({
+                          'Ref': 'AWS::Partition',
+                        }),
+                        ':iam::',
+                        dict({
+                          'Ref': 'AWS::AccountId',
+                        }),
+                        ':root',
+                      ]),
+                    ]),
+                  }),
+                }),
+                'Resource': '*',
+              }),
+              dict({
+                'Action': list([
+                  'kms:Encrypt*',
+                  'kms:Decrypt*',
+                  'kms:ReEncrypt*',
+                  'kms:GenerateDataKey*',
+                  'kms:Describe*',
+                ]),
+                'Condition': dict({
+                  'ArnLike': dict({
+                    'kms:EncryptionContext:aws:logs:arn': dict({
+                      'Fn::Join': list([
+                        '',
+                        list([
+                          'arn:',
+                          dict({
+                            'Ref': 'AWS::Partition',
+                          }),
+                          ':logs:',
+                          dict({
+                            'Ref': 'AWS::Region',
+                          }),
+                          ':',
+                          dict({
+                            'Ref': 'AWS::AccountId',
+                          }),
+                          ':*',
+                        ]),
+                      ]),
+                    }),
+                  }),
+                }),
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        'logs.',
+                        dict({
+                          'Ref': 'AWS::Region',
+                        }),
+                        '.amazonaws.com',
+                      ]),
+                    ]),
+                  }),
+                }),
+                'Resource': '*',
+                'Sid': 'AllowCloudWatchLogs',
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'PendingWindowInDays': 7,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::KMS::Key',
+        'UpdateReplacePolicy': 'Delete',
+      }),
+      'WebBucket1CCCC993': dict({
+        'DeletionPolicy': 'Delete',
+        'Properties': dict({
+          'BucketEncryption': dict({
+            'ServerSideEncryptionConfiguration': list([
+              dict({
+                'ServerSideEncryptionByDefault': dict({
+                  'SSEAlgorithm': 'AES256',
+                }),
+              }),
+            ]),
+          }),
+          'BucketName': 'snapshot-assets-bucket',
+          'PublicAccessBlockConfiguration': dict({
+            'BlockPublicAcls': True,
+            'BlockPublicPolicy': True,
+            'IgnorePublicAcls': True,
+            'RestrictPublicBuckets': True,
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::S3::Bucket',
+        'UpdateReplacePolicy': 'Delete',
+      }),
+      'WebBucketPolicy1F190D61': dict({
+        'Properties': dict({
+          'Bucket': dict({
+            'Ref': 'WebBucket1CCCC993',
+          }),
+          'PolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 's3:*',
+                'Condition': dict({
+                  'Bool': dict({
+                    'aws:SecureTransport': 'false',
+                  }),
+                }),
+                'Effect': 'Deny',
+                'Principal': dict({
+                  'AWS': '*',
+                }),
+                'Resource': list([
+                  dict({
+                    'Fn::GetAtt': list([
+                      'WebBucket1CCCC993',
+                      'Arn',
+                    ]),
+                  }),
+                  dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        dict({
+                          'Fn::GetAtt': list([
+                            'WebBucket1CCCC993',
+                            'Arn',
+                          ]),
+                        }),
+                        '/*',
+                      ]),
+                    ]),
+                  }),
+                ]),
+              }),
+              dict({
+                'Action': 's3:GetObject',
+                'Condition': dict({
+                  'StringEquals': dict({
+                    'AWS:SourceArn': dict({
+                      'Fn::Join': list([
+                        '',
+                        list([
+                          'arn:',
+                          dict({
+                            'Ref': 'AWS::Partition',
+                          }),
+                          ':cloudfront::',
+                          dict({
+                            'Ref': 'AWS::AccountId',
+                          }),
+                          ':distribution/',
+                          dict({
+                            'Ref': 'CdnDistribution149FA6C8',
+                          }),
+                        ]),
+                      ]),
+                    }),
+                  }),
+                }),
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'cloudfront.amazonaws.com',
+                }),
+                'Resource': dict({
+                  'Fn::Join': list([
+                    '',
+                    list([
+                      dict({
+                        'Fn::GetAtt': list([
+                          'WebBucket1CCCC993',
+                          'Arn',
+                        ]),
+                      }),
+                      '/*',
+                    ]),
+                  ]),
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+        }),
+        'Type': 'AWS::S3::BucketPolicy',
+      }),
+    }),
+    'Rules': dict({
+      'CheckBootstrapVersion': dict({
+        'Assertions': list([
+          dict({
+            'Assert': dict({
+              'Fn::Not': list([
+                dict({
+                  'Fn::Contains': list([
+                    list([
+                      '1',
+                      '2',
+                      '3',
+                      '4',
+                      '5',
+                    ]),
+                    dict({
+                      'Ref': 'BootstrapVersion',
+                    }),
+                  ]),
+                }),
+              ]),
+            }),
+            'AssertDescription': "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+          }),
+        ]),
+      }),
+    }),
+  })
+# ---
+# name: test_prod_stack_snapshot
+  dict({
+    'Outputs': dict({
+      'BackendApiEndpoint9267131E': dict({
+        'Value': dict({
+          'Fn::Join': list([
+            '',
+            list([
+              'https://',
+              dict({
+                'Ref': 'BackendApiC05D8D6E',
+              }),
+              '.execute-api.',
+              dict({
+                'Ref': 'AWS::Region',
+              }),
+              '.',
+              dict({
+                'Ref': 'AWS::URLSuffix',
+              }),
+              '/',
+              dict({
+                'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+              }),
+              '/',
+            ]),
+          ]),
+        }),
+      }),
+      'BucketName': dict({
+        'Value': dict({
+          'Ref': 'WebBucket1CCCC993',
+        }),
+      }),
+      'FunctionName': dict({
+        'Value': dict({
+          'Ref': 'BackendLambdaFunctionDED4CD69',
+        }),
+      }),
+      'SiteUrl': dict({
+        'Value': dict({
+          'Fn::Join': list([
+            '',
+            list([
+              'https://',
+              dict({
+                'Fn::GetAtt': list([
+                  'CdnDistribution149FA6C8',
+                  'DomainName',
+                ]),
+              }),
+            ]),
+          ]),
+        }),
+      }),
+    }),
+    'Parameters': dict({
+      'BootstrapVersion': dict({
+        'Default': '/cdk-bootstrap/hnb659fds/version',
+        'Description': 'Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]',
+        'Type': 'AWS::SSM::Parameter::Value<String>',
+      }),
+    }),
+    'Resources': dict({
+      'BackendApiANY55D8AEAE': dict({
+        'Properties': dict({
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'ANY',
+          'Integration': dict({
+            'IntegrationHttpMethod': 'POST',
+            'Type': 'AWS_PROXY',
+            'Uri': dict({
+              'Fn::Join': list([
+                '',
+                list([
+                  'arn:',
+                  dict({
+                    'Ref': 'AWS::Partition',
+                  }),
+                  ':apigateway:',
+                  dict({
+                    'Ref': 'AWS::Region',
+                  }),
+                  ':lambda:path/2015-03-31/functions/',
+                  dict({
+                    'Fn::GetAtt': list([
+                      'BackendLambdaFunctionDED4CD69',
+                      'Arn',
+                    ]),
+                  }),
+                  '/invocations',
+                ]),
+              ]),
+            }),
+          }),
+          'ResourceId': dict({
+            'Fn::GetAtt': list([
+              'BackendApiC05D8D6E',
+              'RootResourceId',
+            ]),
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendApiANYApiPermissionSnapStackBackendApi54AB62F6ANY2BF56DAE': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/',
+                dict({
+                  'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                }),
+                '/*/',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiANYApiPermissionTestSnapStackBackendApi54AB62F6ANYCA00F107': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/test-invoke-stage/*/',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiAccessLogs09CC28F7': dict({
+        'DeletionPolicy': 'Retain',
+        'Properties': dict({
+          'KmsKeyId': dict({
+            'Fn::GetAtt': list([
+              'LogKey15608DC4',
+              'Arn',
+            ]),
+          }),
+          'RetentionInDays': 90,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Logs::LogGroup',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'BackendApiAccount0DC69FBD': dict({
+        'DeletionPolicy': 'Retain',
+        'DependsOn': list([
+          'BackendApiC05D8D6E',
+        ]),
+        'Properties': dict({
+          'CloudWatchRoleArn': dict({
+            'Fn::GetAtt': list([
+              'BackendApiCloudWatchRole7800ACC5',
+              'Arn',
+            ]),
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Account',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'BackendApiC05D8D6E': dict({
+        'Properties': dict({
+          'Name': 'Api',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::ApiGateway::RestApi',
+      }),
+      'BackendApiCloudWatchRole7800ACC5': dict({
+        'DeletionPolicy': 'Retain',
+        'Properties': dict({
+          'AssumeRolePolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 'sts:AssumeRole',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'apigateway.amazonaws.com',
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'ManagedPolicyArns': list([
+            dict({
+              'Fn::Join': list([
+                '',
+                list([
+                  'arn:',
+                  dict({
+                    'Ref': 'AWS::Partition',
+                  }),
+                  ':iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs',
+                ]),
+              ]),
+            }),
+          ]),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Role',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'BackendApiDeployment8DA90E50ca6f3b6f6417c6ed8ff618418a66b32d': dict({
+        'DependsOn': list([
+          'BackendApiproxyANYBA6A9479',
+          'BackendApiproxyOPTIONSD1DEC500',
+          'BackendApiproxy0E2233DE',
+          'BackendApiANY55D8AEAE',
+          'BackendApiOPTIONS917DC21E',
+          'BackendApiRequestValidatorEF2FC84D',
+        ]),
+        'Metadata': dict({
+          'aws:cdk:do-not-refactor': True,
+        }),
+        'Properties': dict({
+          'Description': 'Automatically created by the RestApi construct',
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Deployment',
+      }),
+      'BackendApiDeploymentStageprod3A8BE6AD': dict({
+        'DependsOn': list([
+          'BackendApiAccount0DC69FBD',
+        ]),
+        'Properties': dict({
+          'AccessLogSetting': dict({
+            'DestinationArn': dict({
+              'Fn::GetAtt': list([
+                'BackendApiAccessLogs09CC28F7',
+                'Arn',
+              ]),
+            }),
+            'Format': '$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] "$context.httpMethod $context.resourcePath $context.protocol" $context.status $context.responseLength $context.requestId',
+          }),
+          'DeploymentId': dict({
+            'Ref': 'BackendApiDeployment8DA90E50ca6f3b6f6417c6ed8ff618418a66b32d',
+          }),
+          'MethodSettings': list([
+            dict({
+              'DataTraceEnabled': False,
+              'HttpMethod': '*',
+              'LoggingLevel': 'ERROR',
+              'ResourcePath': '/*',
+              'ThrottlingBurstLimit': 500,
+              'ThrottlingRateLimit': 1000,
+            }),
+          ]),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+          'StageName': 'prod',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::ApiGateway::Stage',
+      }),
+      'BackendApiOPTIONS917DC21E': dict({
+        'Properties': dict({
+          'ApiKeyRequired': False,
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'OPTIONS',
+          'Integration': dict({
+            'IntegrationResponses': list([
+              dict({
+                'ResponseParameters': dict({
+                  'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                  'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                  'method.response.header.Access-Control-Allow-Origin': "'*'",
+                }),
+                'StatusCode': '204',
+              }),
+            ]),
+            'RequestTemplates': dict({
+              'application/json': '{ statusCode: 200 }',
+            }),
+            'Type': 'MOCK',
+          }),
+          'MethodResponses': list([
+            dict({
+              'ResponseParameters': dict({
+                'method.response.header.Access-Control-Allow-Headers': True,
+                'method.response.header.Access-Control-Allow-Methods': True,
+                'method.response.header.Access-Control-Allow-Origin': True,
+              }),
+              'StatusCode': '204',
+            }),
+          ]),
+          'ResourceId': dict({
+            'Fn::GetAtt': list([
+              'BackendApiC05D8D6E',
+              'RootResourceId',
+            ]),
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendApiRequestValidatorEF2FC84D': dict({
+        'Properties': dict({
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+          'ValidateRequestBody': True,
+          'ValidateRequestParameters': True,
+        }),
+        'Type': 'AWS::ApiGateway::RequestValidator',
+      }),
+      'BackendApiproxy0E2233DE': dict({
+        'Properties': dict({
+          'ParentId': dict({
+            'Fn::GetAtt': list([
+              'BackendApiC05D8D6E',
+              'RootResourceId',
+            ]),
+          }),
+          'PathPart': '{proxy+}',
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Resource',
+      }),
+      'BackendApiproxyANYApiPermissionSnapStackBackendApi54AB62F6ANYproxyC91976B6': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/',
+                dict({
+                  'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                }),
+                '/*/*',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiproxyANYApiPermissionTestSnapStackBackendApi54AB62F6ANYproxyF90FFDEA': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'apigateway.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':execute-api:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':',
+                dict({
+                  'Ref': 'BackendApiC05D8D6E',
+                }),
+                '/test-invoke-stage/*/*',
+              ]),
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendApiproxyANYBA6A9479': dict({
+        'Properties': dict({
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'ANY',
+          'Integration': dict({
+            'IntegrationHttpMethod': 'POST',
+            'Type': 'AWS_PROXY',
+            'Uri': dict({
+              'Fn::Join': list([
+                '',
+                list([
+                  'arn:',
+                  dict({
+                    'Ref': 'AWS::Partition',
+                  }),
+                  ':apigateway:',
+                  dict({
+                    'Ref': 'AWS::Region',
+                  }),
+                  ':lambda:path/2015-03-31/functions/',
+                  dict({
+                    'Fn::GetAtt': list([
+                      'BackendLambdaFunctionDED4CD69',
+                      'Arn',
+                    ]),
+                  }),
+                  '/invocations',
+                ]),
+              ]),
+            }),
+          }),
+          'ResourceId': dict({
+            'Ref': 'BackendApiproxy0E2233DE',
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendApiproxyOPTIONSD1DEC500': dict({
+        'Properties': dict({
+          'ApiKeyRequired': False,
+          'AuthorizationType': 'NONE',
+          'HttpMethod': 'OPTIONS',
+          'Integration': dict({
+            'IntegrationResponses': list([
+              dict({
+                'ResponseParameters': dict({
+                  'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                  'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                  'method.response.header.Access-Control-Allow-Origin': "'*'",
+                }),
+                'StatusCode': '204',
+              }),
+            ]),
+            'RequestTemplates': dict({
+              'application/json': '{ statusCode: 200 }',
+            }),
+            'Type': 'MOCK',
+          }),
+          'MethodResponses': list([
+            dict({
+              'ResponseParameters': dict({
+                'method.response.header.Access-Control-Allow-Headers': True,
+                'method.response.header.Access-Control-Allow-Methods': True,
+                'method.response.header.Access-Control-Allow-Origin': True,
+              }),
+              'StatusCode': '204',
+            }),
+          ]),
+          'ResourceId': dict({
+            'Ref': 'BackendApiproxy0E2233DE',
+          }),
+          'RestApiId': dict({
+            'Ref': 'BackendApiC05D8D6E',
+          }),
+        }),
+        'Type': 'AWS::ApiGateway::Method',
+      }),
+      'BackendLambdaFunctionDED4CD69': dict({
+        'DependsOn': list([
+          'BackendLambdaRoleDefaultPolicy23DD83E2',
+          'BackendLambdaRoleB8CC70D8',
+        ]),
+        'Properties': dict({
+          'Code': dict({
+            'S3Bucket': dict({
+              'Fn::Sub': 'cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}',
+            }),
+            'S3Key': '7502ee9f38b0104016baa68e73f2c45989c9d49b959c89e2f7c028a44743690b.zip',
+          }),
+          'FunctionName': 'snap-fn',
+          'Handler': 'index.handler',
+          'LoggingConfig': dict({
+            'LogGroup': dict({
+              'Ref': 'BackendLambdaLogs7F155163',
+            }),
+          }),
+          'MemorySize': 512,
+          'Role': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaRoleB8CC70D8',
+              'Arn',
+            ]),
+          }),
+          'Runtime': 'python3.14',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+          'Timeout': 30,
+        }),
+        'Type': 'AWS::Lambda::Function',
+      }),
+      'BackendLambdaLogs7F155163': dict({
+        'DeletionPolicy': 'Retain',
+        'Properties': dict({
+          'KmsKeyId': dict({
+            'Fn::GetAtt': list([
+              'LogKey15608DC4',
+              'Arn',
+            ]),
+          }),
+          'RetentionInDays': 90,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Logs::LogGroup',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'BackendLambdaRoleB8CC70D8': dict({
+        'Properties': dict({
+          'AssumeRolePolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 'sts:AssumeRole',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'lambda.amazonaws.com',
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Role',
+      }),
+      'BackendLambdaRoleDefaultPolicy23DD83E2': dict({
+        'Properties': dict({
+          'PolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': list([
+                  'logs:CreateLogStream',
+                  'logs:PutLogEvents',
+                ]),
+                'Effect': 'Allow',
+                'Resource': dict({
+                  'Fn::GetAtt': list([
+                    'BackendLambdaLogs7F155163',
+                    'Arn',
+                  ]),
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'PolicyName': 'BackendLambdaRoleDefaultPolicy23DD83E2',
+          'Roles': list([
+            dict({
+              'Ref': 'BackendLambdaRoleB8CC70D8',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Policy',
+      }),
+      'CdnDistribution149FA6C8': dict({
+        'Properties': dict({
+          'DistributionConfig': dict({
+            'CacheBehaviors': list([
+              dict({
+                'AllowedMethods': list([
+                  'GET',
+                  'HEAD',
+                  'OPTIONS',
+                  'PUT',
+                  'PATCH',
+                  'POST',
+                  'DELETE',
+                ]),
+                'CachePolicyId': '4135ea2d-6df8-44a3-9df3-4b5a84be39ad',
+                'Compress': True,
+                'OriginRequestPolicyId': 'b689b0a8-53d0-40ab-baf2-68738e2966ac',
+                'PathPattern': '/api/*',
+                'TargetOriginId': 'SnapStackCdnDistributionOrigin216D43506',
+                'ViewerProtocolPolicy': 'redirect-to-https',
+              }),
+            ]),
+            'DefaultCacheBehavior': dict({
+              'CachePolicyId': '658327ea-f89d-4fab-a63d-7e88639e58f6',
+              'Compress': True,
+              'TargetOriginId': 'SnapStackCdnDistributionOrigin1BC6BFCD6',
+              'ViewerProtocolPolicy': 'redirect-to-https',
+            }),
+            'DefaultRootObject': 'index.html',
+            'Enabled': True,
+            'HttpVersion': 'http2',
+            'IPV6Enabled': True,
+            'Origins': list([
+              dict({
+                'DomainName': dict({
+                  'Fn::GetAtt': list([
+                    'WebBucket1CCCC993',
+                    'RegionalDomainName',
+                  ]),
+                }),
+                'Id': 'SnapStackCdnDistributionOrigin1BC6BFCD6',
+                'OriginAccessControlId': dict({
+                  'Fn::GetAtt': list([
+                    'CdnDistributionOrigin1S3OriginAccessControlFA39EED2',
+                    'Id',
+                  ]),
+                }),
+                'S3OriginConfig': dict({
+                  'OriginAccessIdentity': '',
+                }),
+              }),
+              dict({
+                'CustomOriginConfig': dict({
+                  'OriginProtocolPolicy': 'https-only',
+                  'OriginSSLProtocols': list([
+                    'TLSv1.2',
+                  ]),
+                }),
+                'DomainName': dict({
+                  'Fn::Select': list([
+                    2,
+                    dict({
+                      'Fn::Split': list([
+                        '/',
+                        dict({
+                          'Fn::Join': list([
+                            '',
+                            list([
+                              'https://',
+                              dict({
+                                'Ref': 'BackendApiC05D8D6E',
+                              }),
+                              '.execute-api.',
+                              dict({
+                                'Ref': 'AWS::Region',
+                              }),
+                              '.',
+                              dict({
+                                'Ref': 'AWS::URLSuffix',
+                              }),
+                              '/',
+                              dict({
+                                'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                              }),
+                              '/',
+                            ]),
+                          ]),
+                        }),
+                      ]),
+                    }),
+                  ]),
+                }),
+                'Id': 'SnapStackCdnDistributionOrigin216D43506',
+                'OriginPath': dict({
+                  'Fn::Join': list([
+                    '',
+                    list([
+                      '/',
+                      dict({
+                        'Fn::Select': list([
+                          3,
+                          dict({
+                            'Fn::Split': list([
+                              '/',
+                              dict({
+                                'Fn::Join': list([
+                                  '',
+                                  list([
+                                    'https://',
+                                    dict({
+                                      'Ref': 'BackendApiC05D8D6E',
+                                    }),
+                                    '.execute-api.',
+                                    dict({
+                                      'Ref': 'AWS::Region',
+                                    }),
+                                    '.',
+                                    dict({
+                                      'Ref': 'AWS::URLSuffix',
+                                    }),
+                                    '/',
+                                    dict({
+                                      'Ref': 'BackendApiDeploymentStageprod3A8BE6AD',
+                                    }),
+                                    '/',
+                                  ]),
+                                ]),
+                              }),
+                            ]),
+                          }),
+                        ]),
+                      }),
+                    ]),
+                  ]),
+                }),
+              }),
+            ]),
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::CloudFront::Distribution',
+      }),
+      'CdnDistributionOrigin1S3OriginAccessControlFA39EED2': dict({
+        'Properties': dict({
+          'OriginAccessControlConfig': dict({
+            'Name': 'SnapStackCdnDistributionOrigin1S3OriginAccessControl4D869369',
+            'OriginAccessControlOriginType': 's3',
+            'SigningBehavior': 'always',
+            'SigningProtocol': 'sigv4',
+          }),
+        }),
+        'Type': 'AWS::CloudFront::OriginAccessControl',
+      }),
+      'LogKey15608DC4': dict({
+        'DeletionPolicy': 'Retain',
+        'Properties': dict({
+          'Description': 'company_cdk: encrypts CloudWatch log groups',
+          'EnableKeyRotation': True,
+          'KeyPolicy': dict({
+            'Statement': list([
+              dict({
+                'Action': 'kms:*',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'AWS': dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        'arn:',
+                        dict({
+                          'Ref': 'AWS::Partition',
+                        }),
+                        ':iam::',
+                        dict({
+                          'Ref': 'AWS::AccountId',
+                        }),
+                        ':root',
+                      ]),
+                    ]),
+                  }),
+                }),
+                'Resource': '*',
+              }),
+              dict({
+                'Action': list([
+                  'kms:Encrypt*',
+                  'kms:Decrypt*',
+                  'kms:ReEncrypt*',
+                  'kms:GenerateDataKey*',
+                  'kms:Describe*',
+                ]),
+                'Condition': dict({
+                  'ArnLike': dict({
+                    'kms:EncryptionContext:aws:logs:arn': dict({
+                      'Fn::Join': list([
+                        '',
+                        list([
+                          'arn:',
+                          dict({
+                            'Ref': 'AWS::Partition',
+                          }),
+                          ':logs:',
+                          dict({
+                            'Ref': 'AWS::Region',
+                          }),
+                          ':',
+                          dict({
+                            'Ref': 'AWS::AccountId',
+                          }),
+                          ':*',
+                        ]),
+                      ]),
+                    }),
+                  }),
+                }),
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        'logs.',
+                        dict({
+                          'Ref': 'AWS::Region',
+                        }),
+                        '.amazonaws.com',
+                      ]),
+                    ]),
+                  }),
+                }),
+                'Resource': '*',
+                'Sid': 'AllowCloudWatchLogs',
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'PendingWindowInDays': 7,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::KMS::Key',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'WebBucket1CCCC993': dict({
+        'DeletionPolicy': 'Retain',
+        'Properties': dict({
+          'BucketEncryption': dict({
+            'ServerSideEncryptionConfiguration': list([
+              dict({
+                'ServerSideEncryptionByDefault': dict({
+                  'SSEAlgorithm': 'AES256',
+                }),
+              }),
+            ]),
+          }),
+          'BucketName': 'snapshot-assets-bucket',
+          'PublicAccessBlockConfiguration': dict({
+            'BlockPublicAcls': True,
+            'BlockPublicPolicy': True,
+            'IgnorePublicAcls': True,
+            'RestrictPublicBuckets': True,
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'prod',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+          'VersioningConfiguration': dict({
+            'Status': 'Enabled',
+          }),
+        }),
+        'Type': 'AWS::S3::Bucket',
+        'UpdateReplacePolicy': 'Retain',
+      }),
+      'WebBucketPolicy1F190D61': dict({
+        'Properties': dict({
+          'Bucket': dict({
+            'Ref': 'WebBucket1CCCC993',
+          }),
+          'PolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 's3:*',
+                'Condition': dict({
+                  'Bool': dict({
+                    'aws:SecureTransport': 'false',
+                  }),
+                }),
+                'Effect': 'Deny',
+                'Principal': dict({
+                  'AWS': '*',
+                }),
+                'Resource': list([
+                  dict({
+                    'Fn::GetAtt': list([
+                      'WebBucket1CCCC993',
+                      'Arn',
+                    ]),
+                  }),
+                  dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        dict({
+                          'Fn::GetAtt': list([
+                            'WebBucket1CCCC993',
+                            'Arn',
+                          ]),
+                        }),
+                        '/*',
+                      ]),
+                    ]),
+                  }),
+                ]),
+              }),
+              dict({
+                'Action': 's3:GetObject',
+                'Condition': dict({
+                  'StringEquals': dict({
+                    'AWS:SourceArn': dict({
+                      'Fn::Join': list([
+                        '',
+                        list([
+                          'arn:',
+                          dict({
+                            'Ref': 'AWS::Partition',
+                          }),
+                          ':cloudfront::',
+                          dict({
+                            'Ref': 'AWS::AccountId',
+                          }),
+                          ':distribution/',
+                          dict({
+                            'Ref': 'CdnDistribution149FA6C8',
+                          }),
+                        ]),
+                      ]),
+                    }),
+                  }),
+                }),
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'cloudfront.amazonaws.com',
+                }),
+                'Resource': dict({
+                  'Fn::Join': list([
+                    '',
+                    list([
+                      dict({
+                        'Fn::GetAtt': list([
+                          'WebBucket1CCCC993',
+                          'Arn',
+                        ]),
+                      }),
+                      '/*',
+                    ]),
+                  ]),
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+        }),
+        'Type': 'AWS::S3::BucketPolicy',
+      }),
+    }),
+    'Rules': dict({
+      'CheckBootstrapVersion': dict({
+        'Assertions': list([
+          dict({
+            'Assert': dict({
+              'Fn::Not': list([
+                dict({
+                  'Fn::Contains': list([
+                    list([
+                      '1',
+                      '2',
+                      '3',
+                      '4',
+                      '5',
+                    ]),
+                    dict({
+                      'Ref': 'BootstrapVersion',
+                    }),
+                  ]),
+                }),
+              ]),
+            }),
+            'AssertDescription': "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+          }),
+        ]),
+      }),
+    }),
+  })
+# ---
+# name: test_worker_stack_snapshot
+  dict({
+    'Outputs': dict({
+      'FunctionName': dict({
+        'Value': dict({
+          'Ref': 'BackendLambdaFunctionDED4CD69',
+        }),
+      }),
+      'TopicArn': dict({
+        'Value': dict({
+          'Ref': 'TriggersTopicF77BB295',
+        }),
+      }),
+    }),
+    'Parameters': dict({
+      'BootstrapVersion': dict({
+        'Default': '/cdk-bootstrap/hnb659fds/version',
+        'Description': 'Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]',
+        'Type': 'AWS::SSM::Parameter::Value<String>',
+      }),
+    }),
+    'Resources': dict({
+      'BackendLambdaFunctionAllowInvokeSnapStackTriggersTopic1426BB203DCEA0F3': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'sns.amazonaws.com',
+          'SourceArn': dict({
+            'Ref': 'TriggersTopicF77BB295',
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'BackendLambdaFunctionDED4CD69': dict({
+        'DependsOn': list([
+          'BackendLambdaRoleDefaultPolicy23DD83E2',
+          'BackendLambdaRoleB8CC70D8',
+        ]),
+        'Properties': dict({
+          'Code': dict({
+            'S3Bucket': dict({
+              'Fn::Sub': 'cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}',
+            }),
+            'S3Key': '7502ee9f38b0104016baa68e73f2c45989c9d49b959c89e2f7c028a44743690b.zip',
+          }),
+          'FunctionName': 'snap-fn',
+          'Handler': 'index.handler',
+          'LoggingConfig': dict({
+            'LogGroup': dict({
+              'Ref': 'BackendLambdaLogs7F155163',
+            }),
+          }),
+          'MemorySize': 512,
+          'Role': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaRoleB8CC70D8',
+              'Arn',
+            ]),
+          }),
+          'Runtime': 'python3.14',
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+          'Timeout': 30,
+        }),
+        'Type': 'AWS::Lambda::Function',
+      }),
+      'BackendLambdaFunctionTopicCD3F7FC1': dict({
+        'Properties': dict({
+          'Endpoint': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Protocol': 'lambda',
+          'TopicArn': dict({
+            'Ref': 'TriggersTopicF77BB295',
+          }),
+        }),
+        'Type': 'AWS::SNS::Subscription',
+      }),
+      'BackendLambdaLogs7F155163': dict({
+        'DeletionPolicy': 'Delete',
+        'Properties': dict({
+          'KmsKeyId': dict({
+            'Fn::GetAtt': list([
+              'LogKey15608DC4',
+              'Arn',
+            ]),
+          }),
+          'RetentionInDays': 7,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Logs::LogGroup',
+        'UpdateReplacePolicy': 'Delete',
+      }),
+      'BackendLambdaRoleB8CC70D8': dict({
+        'Properties': dict({
+          'AssumeRolePolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 'sts:AssumeRole',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': 'lambda.amazonaws.com',
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Role',
+      }),
+      'BackendLambdaRoleDefaultPolicy23DD83E2': dict({
+        'Properties': dict({
+          'PolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': list([
+                  'logs:CreateLogStream',
+                  'logs:PutLogEvents',
+                ]),
+                'Effect': 'Allow',
+                'Resource': dict({
+                  'Fn::GetAtt': list([
+                    'BackendLambdaLogs7F155163',
+                    'Arn',
+                  ]),
+                }),
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'PolicyName': 'BackendLambdaRoleDefaultPolicy23DD83E2',
+          'Roles': list([
+            dict({
+              'Ref': 'BackendLambdaRoleB8CC70D8',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::IAM::Policy',
+      }),
+      'LogKey15608DC4': dict({
+        'DeletionPolicy': 'Delete',
+        'Properties': dict({
+          'Description': 'company_cdk: encrypts CloudWatch log groups',
+          'EnableKeyRotation': True,
+          'KeyPolicy': dict({
+            'Statement': list([
+              dict({
+                'Action': 'kms:*',
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'AWS': dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        'arn:',
+                        dict({
+                          'Ref': 'AWS::Partition',
+                        }),
+                        ':iam::',
+                        dict({
+                          'Ref': 'AWS::AccountId',
+                        }),
+                        ':root',
+                      ]),
+                    ]),
+                  }),
+                }),
+                'Resource': '*',
+              }),
+              dict({
+                'Action': list([
+                  'kms:Encrypt*',
+                  'kms:Decrypt*',
+                  'kms:ReEncrypt*',
+                  'kms:GenerateDataKey*',
+                  'kms:Describe*',
+                ]),
+                'Condition': dict({
+                  'ArnLike': dict({
+                    'kms:EncryptionContext:aws:logs:arn': dict({
+                      'Fn::Join': list([
+                        '',
+                        list([
+                          'arn:',
+                          dict({
+                            'Ref': 'AWS::Partition',
+                          }),
+                          ':logs:',
+                          dict({
+                            'Ref': 'AWS::Region',
+                          }),
+                          ':',
+                          dict({
+                            'Ref': 'AWS::AccountId',
+                          }),
+                          ':*',
+                        ]),
+                      ]),
+                    }),
+                  }),
+                }),
+                'Effect': 'Allow',
+                'Principal': dict({
+                  'Service': dict({
+                    'Fn::Join': list([
+                      '',
+                      list([
+                        'logs.',
+                        dict({
+                          'Ref': 'AWS::Region',
+                        }),
+                        '.amazonaws.com',
+                      ]),
+                    ]),
+                  }),
+                }),
+                'Resource': '*',
+                'Sid': 'AllowCloudWatchLogs',
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'PendingWindowInDays': 7,
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::KMS::Key',
+        'UpdateReplacePolicy': 'Delete',
+      }),
+      'TriggersEventRuleAllowEventRuleSnapStackBackendLambdaFunctionB22B3396AAEFDED1': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'events.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::GetAtt': list([
+              'TriggersEventRuleF4E5E90E',
+              'Arn',
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'TriggersEventRuleF4E5E90E': dict({
+        'Properties': dict({
+          'Description': 'Event pattern trigger created by company_cdk',
+          'EventPattern': dict({
+            'detail-type': list([
+              'Order Created',
+            ]),
+            'source': list([
+              'orders.service',
+            ]),
+          }),
+          'State': 'ENABLED',
+          'Targets': list([
+            dict({
+              'Arn': dict({
+                'Fn::GetAtt': list([
+                  'BackendLambdaFunctionDED4CD69',
+                  'Arn',
+                ]),
+              }),
+              'Id': 'Target0',
+              'RetryPolicy': dict({
+                'MaximumRetryAttempts': 2,
+              }),
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Events::Rule',
+      }),
+      'TriggersScheduleRule2E7EE288': dict({
+        'Properties': dict({
+          'Description': 'Scheduled trigger created by company_cdk',
+          'ScheduleExpression': 'rate(1 hour)',
+          'State': 'ENABLED',
+          'Targets': list([
+            dict({
+              'Arn': dict({
+                'Fn::GetAtt': list([
+                  'BackendLambdaFunctionDED4CD69',
+                  'Arn',
+                ]),
+              }),
+              'Id': 'Target0',
+              'RetryPolicy': dict({
+                'MaximumRetryAttempts': 2,
+              }),
+            }),
+          ]),
+        }),
+        'Type': 'AWS::Events::Rule',
+      }),
+      'TriggersScheduleRuleAllowEventRuleSnapStackBackendLambdaFunctionB22B3396BCF5138F': dict({
+        'Properties': dict({
+          'Action': 'lambda:InvokeFunction',
+          'FunctionName': dict({
+            'Fn::GetAtt': list([
+              'BackendLambdaFunctionDED4CD69',
+              'Arn',
+            ]),
+          }),
+          'Principal': 'events.amazonaws.com',
+          'SourceArn': dict({
+            'Fn::GetAtt': list([
+              'TriggersScheduleRule2E7EE288',
+              'Arn',
+            ]),
+          }),
+        }),
+        'Type': 'AWS::Lambda::Permission',
+      }),
+      'TriggersTopicF77BB295': dict({
+        'Properties': dict({
+          'KmsMasterKeyId': dict({
+            'Fn::Join': list([
+              '',
+              list([
+                'arn:',
+                dict({
+                  'Ref': 'AWS::Partition',
+                }),
+                ':kms:',
+                dict({
+                  'Ref': 'AWS::Region',
+                }),
+                ':',
+                dict({
+                  'Ref': 'AWS::AccountId',
+                }),
+                ':alias/aws/sns',
+              ]),
+            ]),
+          }),
+          'Tags': list([
+            dict({
+              'Key': 'CostCenter',
+              'Value': 'CC-1',
+            }),
+            dict({
+              'Key': 'Environment',
+              'Value': 'dev',
+            }),
+            dict({
+              'Key': 'ManagedBy',
+              'Value': 'company_cdk',
+            }),
+            dict({
+              'Key': 'Owner',
+              'Value': 'platform',
+            }),
+          ]),
+          'TopicName': 'snapshot-topic',
+        }),
+        'Type': 'AWS::SNS::Topic',
+      }),
+      'TriggersTopicPolicy4F61FE7D': dict({
+        'Properties': dict({
+          'PolicyDocument': dict({
+            'Statement': list([
+              dict({
+                'Action': 'sns:Publish',
+                'Condition': dict({
+                  'Bool': dict({
+                    'aws:SecureTransport': 'false',
+                  }),
+                }),
+                'Effect': 'Deny',
+                'Principal': '*',
+                'Resource': dict({
+                  'Ref': 'TriggersTopicF77BB295',
+                }),
+                'Sid': 'AllowPublishThroughSSLOnly',
+              }),
+            ]),
+            'Version': '2012-10-17',
+          }),
+          'Topics': list([
+            dict({
+              'Ref': 'TriggersTopicF77BB295',
+            }),
+          ]),
+        }),
+        'Type': 'AWS::SNS::TopicPolicy',
+      }),
+    }),
+    'Rules': dict({
+      'CheckBootstrapVersion': dict({
+        'Assertions': list([
+          dict({
+            'Assert': dict({
+              'Fn::Not': list([
+                dict({
+                  'Fn::Contains': list([
+                    list([
+                      '1',
+                      '2',
+                      '3',
+                      '4',
+                      '5',
+                    ]),
+                    dict({
+                      'Ref': 'BootstrapVersion',
+                    }),
+                  ]),
+                }),
+              ]),
+            }),
+            'AssertDescription': "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+          }),
+        ]),
+      }),
+    }),
+  })
+# ---
