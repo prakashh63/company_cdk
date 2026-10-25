@@ -18,7 +18,6 @@ results: list[tuple[str, str]] = []
 
 def step(name: str, cmd: list[str], cwd: Path = ROOT) -> bool:
     print(f"\n>>> {name}\n$ {' '.join(cmd)}", flush=True)
-    # proc = subprocess.run(cmd, cwd=cwd, env=ENV, capture_output=True, text=True)
     proc = subprocess.run(cmd, check=False, cwd=cwd, env=ENV, capture_output=True, text=True)
     
     ok = proc.returncode == 0

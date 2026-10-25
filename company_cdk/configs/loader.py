@@ -23,7 +23,7 @@ def load_config(path: str | Path) -> WebAppConfig:
 
     
     if not isinstance(data, dict):
-        raise ValueError(  # noqa: TRY004
+        raise ValueError(
             f"{config_path} is empty or is not a YAML mapping. "
             "Expected key: value pairs such as 'app_name: my-app'."
     )
