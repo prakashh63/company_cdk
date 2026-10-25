@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "company_cdk"
+version = "0.2.0"
+description = "Standardized, secure AWS CDK constructs for serverless web apps and workers"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "prakash", email = "prakashmokesh2004@gmail.com" }]
+dependencies = [
+    "aws-cdk-lib>=2.274.0",
+    "constructs>=10.0.0,<11.0.0",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "cdk-nag>=3.0.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "syrupy", "mypy", "ruff", "types-PyYAML", "build"]
+
+[project.urls]
+Repository = "https://github.com/prakashh63/company_cdk"
+
+[tool.setuptools.packages.find]
+include = ["company_cdk*"]
+
+[tool.setuptools.package-data]
+company_cdk = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+exclude = ["cdk.out", "examples", "build", "scripts"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["cdk.out", "node_modules"]

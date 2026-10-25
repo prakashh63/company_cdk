@@ -1,0 +1,11 @@
+.venv/
+cdk.out/
+dist/
+build/
+__pycache__/
+*.egg-info/
+node_modules/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+nag.txt
