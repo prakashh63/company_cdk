@@ -1,0 +1,16 @@
+# Web app: S3 + CloudFront + API Gateway + Lambda
+app_name: customer-portal
+environment: dev            # dev | staging | prod
+owner_team: frontend-devs
+cost_center: CC-1024        # optional
+s3:
+  bucket_name: cust-portal-web-assets-dev   # must be globally unique if you deploy
+lambda_backend:
+  function_name: portal-api-handler
+  entry_point_dir: src/backend_lambda       # relative to this file
+  memory_mb: 1024
+  environment_vars:
+    TABLE_NAME: Customers
+api_gateway:
+  stage_name: v1
+  rate_limit: 2000
